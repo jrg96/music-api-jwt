@@ -15,6 +15,11 @@ import com.empresa.api.entity.Usuario;
 import com.empresa.api.repository.UsuarioRepository;
 
 
+/*
+ * Clase de servicio ocupada para implementar nuestra propia logica de autenticacion
+ * (debido a que nuestras tablas de la DB y manera de representar las "Authorities"
+ * no es la default que ocupa Spring Security)
+ * */
 @Service
 public class UsuarioServiceJpa implements UserDetailsService 
 {
@@ -30,9 +35,15 @@ public class UsuarioServiceJpa implements UserDetailsService
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
 		
+		// Enviamos a Spring Secuirty, la informacion que le interesa para representar a un usuario
 		return new User(usuario.getUsername(), usuario.getPassword(), getAuthority(usuario));
 	}
 	
+	
+	/*
+	 * Logica de negocio propia para obtener las Authorities de un usuario en base a nuestra
+	 * estructura dentro de la DB
+	 * */
 	private Set<SimpleGrantedAuthority> getAuthority(Usuario usuario) 
 	{
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();

@@ -28,6 +28,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .passwordEncoder(passwordEncoder());
     }
 	
+	
+	/*
+	 * Funcion ocupada para indicar a Spring Security, que nosotros queremos ocupar nuestra
+	 * propia logica de autenticacion, encriptando las contraseñas con BCrypt en el proceso de
+	 * autenticacion
+	 * */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception 
 	{
@@ -35,8 +41,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 	}
 	
 	
+	
+	/*
+	 * Funcion ocupada para indicar que todas las rutas a excepcion de /token/generate-oken
+	 * deben encontrarse restringidas mientras no se provea un token JWT valido
+	 * */
 	@Override
-    protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(HttpSecurity http) throws Exception {
 		// Deshabilitamos CORS y CSRF porque lo que queremos es que la API sea accesible
 		// desde cualquier parte donde sea llamda
         http.cors().and().csrf().disable().
@@ -49,11 +60,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         
         http
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);*/
-    }
+	}
 	
 	
 	
-	
+	/*
+	 * Bean ocupado para indicar a nuestro Custom authentication, que las contraseñas deben ser modificadas
+	 * ocuapndo BCrypt (porque en la DB asi se encuentran encriptadas)
+	 * */
 	@Bean
 	public PasswordEncoder passwordEncoder()
 	{
@@ -65,8 +79,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 	 * Exponiendo el AuthenticationManager que necesitamos en el controlador AuthController
 	 * */
 	@Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
+	@Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception 
+	{
         return super.authenticationManagerBean();
-    }
+	}
 }
