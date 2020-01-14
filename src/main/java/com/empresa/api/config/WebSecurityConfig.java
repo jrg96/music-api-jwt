@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -56,12 +57,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .anyRequest().authenticated();
                 /*.and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);*/
         
+        
+        // Justo en esta linea agregamos el filtro de autenticacion JWT, asi este funcionara
+        // para todo recurso que se quiera acceder a excepcion del /token/*
         http
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);*/
+                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 	}
 	
+	
+	
+	
+	/*
+	 * Bean encargado de proveer el objeto JwtAuthenticationFilter, encargado de liberar
+	 * un recurso solamente si el usuario provee un token valido
+	 * */
+	@Bean
+    public JwtAuthenticationFilter authenticationTokenFilterBean() throws Exception 
+	{
+        return new JwtAuthenticationFilter();
+    }
 	
 	
 	/*
