@@ -1,0 +1,57 @@
+create table rolapi (
+	id NUMBER(11) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), 
+	descripcion varchar2(255), 
+	nombre varchar(255)
+);
+
+ALTER TABLE rolapi ADD (
+  CONSTRAINT rolapi_pk PRIMARY KEY (id)
+);
+
+
+create table usuarioapi (
+	id NUMBER(11) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), 
+	edad NUMBER(3), 
+	password varchar2(255), 
+	salario NUMBER(5,2), 
+	username varchar2(255)
+);
+
+ALTER TABLE usuarioapi ADD (
+  CONSTRAINT usuarioapi_pk PRIMARY KEY (id)
+);
+
+
+create table usuario_rolesapi (
+	id_usuario NUMBER(11) not null, 
+	id_rol NUMBER(11) not null
+);
+
+ALTER TABLE usuario_rolesapi ADD (
+  CONSTRAINT usuario_roles_api_pk PRIMARY KEY (id_usuario, id_rol)
+);
+
+
+ALTER TABLE usuario_rolesapi
+ADD CONSTRAINT fk_usuario_1245
+   FOREIGN KEY (id_usuario)
+   REFERENCES usuarioapi (id);
+   
+ALTER TABLE usuario_rolesapi
+ADD CONSTRAINT fk_rol_1245
+   FOREIGN KEY (id_rol)
+   REFERENCES rolapi (id);
+   
+
+   
+INSERT INTO rolapi(descripcion, nombre) VALUES('Rol administrador', 'ADMIN');
+INSERT INTO rolapi(descripcion, nombre) VALUES('Rol usuario normal', 'USUARIO');
+
+INSERT INTO usuarioapi(username, password, edad, salario) VALUES('admin', '$2a$10$O4zV8CJ.E6KyrwuRocn4ceIoYRB/AjwCA6BbGs98a3WW3GUiKXkZy', 23, 500); --luis123
+INSERT INTO usuarioapi(username, password, edad, salario) VALUES('usuario', '$2a$10$O4zV8CJ.E6KyrwuRocn4ceIoYRB/AjwCA6BbGs98a3WW3GUiKXkZy', 23, 500); --luis123
+
+INSERT INTO usuario_rolesapi (id_usuario, id_rol) VALUES (3, 1);
+INSERT INTO usuario_rolesapi (id_usuario, id_rol) VALUES (4, 2);
+
+
+
